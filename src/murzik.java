@@ -2,44 +2,29 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 
 public class murzik {
-    public static boolean isBalanced(String str) {
-        Deque<Character> stack = new ArrayDeque<>();
-        for (int i = 0; i < str.length(); i++) {
-            char c = str.charAt(i);
-            // Открывающая скобка
-            if (c == '(' || c == '[' || c == '{') {
-                stack.push(c);
-            }
-            // Закрывающая скобка
-            else {
-                // Если стек пуст, значит открывающей скобки нет
-                if (stack.isEmpty()) {
-                    return false;
-                }
-
-                char top = stack.pop();
-
-                // Проверяем соответствие скобок
-                if (c == ')' && top != '(') {
-                    return false;
-                }
-                if (c == ']' && top != '[') {
-                    return false;
-                }
-                if (c == '}' && top != '{') {
+    public static boolean proverka(String stroka) {
+        Deque<Character> stek = new ArrayDeque<>();
+        for (int i = 0; i < stroka.length(); i++) {
+            char znak = stroka.charAt(i);
+            if (znak == '(' || znak == '[' || znak == '{') {
+                stek.push(znak);
+            } else if (znak == ')' || znak == ']' || znak == '}') {
+                if (stek.isEmpty()) return false;
+                char last = stek.pop();
+                if ((znak == ')' && last != '(') ||
+                        (znak == ']' && last != '[') ||
+                        (znak == '}' && last != '{')) {
                     return false;
                 }
             }
         }
-        // Если стек пуст — все скобки закрыты
-        return stack.isEmpty();
+        return stek.isEmpty();
     }
+
     public static void main(String[] args) {
-        System.out.println("[] -> " + isBalanced("[]"));
-        System.out.println("[](){} -> " + isBalanced("[](){}"));
-        System.out.println("[({})] -> " + isBalanced("[({})]"));
-        System.out.println("[({}()){}] -> " + isBalanced("[({}()){}]"));
-        System.out.println("{] -> " + isBalanced("{]"));
-        System.out.println("({)} -> " + isBalanced("({)}"));
+        String[] tests = {"[]", "[](){}", "[({})]", "[({}()){}]", "{]", "({)}", "", "abc"};
+        for (String t : tests) {
+            System.out.println(t + " -> " + proverka(t));
+        }
     }
 }
